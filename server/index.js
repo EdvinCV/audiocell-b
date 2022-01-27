@@ -56,7 +56,7 @@ VentaDetalle.belongsTo(Venta);
 Venta.hasMany(VentaDetalle);
 
 // CAMBIOS
-const forzar = false;
+const forzar = true;
 db.sequelize.sync({force: forzar}).then(async () => {
     try {
         if(forzar){
@@ -65,8 +65,6 @@ db.sequelize.sync({force: forzar}).then(async () => {
             await Categoria.create({name: "Kit Claro"});
             await Categoria.create({name: "Kit Tigo"});
             await Categoria.create({name: "Kit Liberado"});
-            await Categoria.create({name: "Epin Claro"});
-            await Categoria.create({name: "Epin Tigo"});
             await Categoria.create({name: "SIM Claro"});
             await Categoria.create({name: "SIM Tigo"});
             await Categoria.create({name: "Accesorios"});

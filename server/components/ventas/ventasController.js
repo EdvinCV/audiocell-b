@@ -19,7 +19,7 @@ const { sequelize } = require('../../config/dbconnection');
 
 exports.getProductosVentaController = async (req, res) => {
     try {
-        const query = "SELECT P.id, P.name as producto, C.name, P.color, P.precioVenta, SUM(S.cantidadRestante) as stock FROM Productos as P INNER JOIN Categoria as C ON P.CategoriumId=C.id INNER JOIN Stocks as S ON P.id=S.ProductoId WHERE cantidadRestante > 0 AND P.status = true GROUP BY P.id";
+        const query = "SELECT P.id, P.proveedor, P.name as producto, C.name, P.color, P.precioVenta1, P.precioVenta2, P.precioVenta3, SUM(S.cantidadRestante) as stock FROM Productos as P INNER JOIN Categoria as C ON P.CategoriumId=C.id INNER JOIN Stocks as S ON P.id=S.ProductoId WHERE cantidadRestante > 0 AND P.status = true GROUP BY P.id";
         const [results, metadata] = await 
         sequelize.query(query);
         res.status(200).json({

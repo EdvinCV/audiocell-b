@@ -1,5 +1,3 @@
-const userModel = require("../users/userModel");
-
 module.exports = (sequelize, Sequelize) => {
     const Venta = sequelize.define('Venta', {
         id: {

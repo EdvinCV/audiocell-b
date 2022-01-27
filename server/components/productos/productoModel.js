@@ -9,9 +9,21 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING(50),
             allowNull: false
         },
-        precioVenta: {
+        precioVenta1: {
             type: Sequelize.DECIMAL,
             allowNull: true,
+        },
+        precioVenta2: {
+            type: Sequelize.DECIMAL,
+            allowNull: true,
+        },
+        precioVenta3: {
+            type: Sequelize.DECIMAL,
+            allowNull: true,
+        },
+        proveedor: {
+            type: Sequelize.STRING(50),
+            allowNull: true
         },
         color: {
             type: Sequelize.STRING(50),
