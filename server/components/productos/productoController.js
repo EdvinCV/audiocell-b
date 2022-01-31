@@ -73,17 +73,31 @@ exports.getReporteProductos = async (req, res) => {
 exports.getProductosController = async (req, res) => {
     try {
         if(req.query.buscador===""){
-            var [results, metadata] = await sequelize.query("SELECT P.id, P.proveedor, P.name, C.name as categoria, P.precioVenta1, P.precioVenta2, P.precioVenta3, P.color, SUM(S.cantidadRestante) as disponible FROM Stocks as S RIGHT JOIN Productos as P ON S.ProductoId=P.id INNER JOIN Categoria as C ON P.CategoriumId=C.id WHERE P.status=true GROUP BY P.id HAVING disponible>0 ORDER BY P.id;");
-            var [resultsNoStock, metadataNoStock] = await sequelize.query("SELECT P.id, P.proveedor, P.name, C.name as categoria, P.precioVenta1, P.precioVenta2, P.precioVenta3, P.color, SUM(S.cantidadRestante) as disponible FROM Stocks as S RIGHT JOIN Productos as P ON S.ProductoId=P.id INNER JOIN Categoria as C ON P.CategoriumId=C.id WHERE P.status=true GROUP BY P.id HAVING disponible<=0 OR disponible IS NULL ORDER BY P.id;");
+            var [results, metadata] = await sequelize.query("SELECT P.id, P.proveedor, P.name, C.name as categoria, P.precioVenta, P.precioVenta2, P.precioVenta3, P.color, SUM(S.cantidadRestante) as disponible FROM Stocks as S RIGHT JOIN Productos as P ON S.ProductoId=P.id INNER JOIN Categoria as C ON P.CategoriumId=C.id WHERE P.status=true GROUP BY P.id HAVING disponible>0 ORDER BY P.id;");
+            var [resultsNoStock, metadataNoStock] = await sequelize.query("SELECT P.id, P.proveedor, P.name, C.name as categoria, P.precioVenta, P.precioVenta2, P.precioVenta3, P.color, SUM(S.cantidadRestante) as disponible FROM Stocks as S RIGHT JOIN Productos as P ON S.ProductoId=P.id INNER JOIN Categoria as C ON P.CategoriumId=C.id WHERE P.status=true GROUP BY P.id HAVING disponible<=0 OR disponible IS NULL ORDER BY P.id;");
         }else {
             var [results, metadata] = await sequelize.query(
-                `SELECT P.id, P.proveedor, P.name, C.name as categoria, P.precioVenta1, P.precioVenta2, P.precioVenta3, P.color, SUM(S.cantidadRestante) as disponible FROM Stocks as S RIGHT JOIN Productos as P ON S.ProductoId=P.id INNER JOIN Categoria as C ON P.CategoriumId=C.id WHERE P.status=true AND P.name LIKE '%${req.query.buscador}%' OR C.name LIKE '%${req.query.buscador}%' GROUP BY P.id;`);
-            var [resultsNoStock, metadataNoStock] = await sequelize.query("SELECT P.id, P.proveedor, P.name, C.name as categoria, P.precioVenta1, P.precioVenta2, P.precioVenta3, P.color, SUM(S.cantidadRestante) as disponible FROM Stocks as S RIGHT JOIN Productos as P ON S.ProductoId=P.id INNER JOIN Categoria as C ON P.CategoriumId=C.id WHERE P.status=true GROUP BY P.id HAVING disponible<=0 OR disponible IS NULL ORDER BY P.id;");
+                `SELECT P.id, P.proveedor, P.name, C.name as categoria, P.precioVenta, P.precioVenta2, P.precioVenta3, P.color, SUM(S.cantidadRestante) as disponible FROM Stocks as S RIGHT JOIN Productos as P ON S.ProductoId=P.id INNER JOIN Categoria as C ON P.CategoriumId=C.id WHERE P.status=true AND P.name LIKE '%${req.query.buscador}%' OR C.name LIKE '%${req.query.buscador}%' GROUP BY P.id;`);
+            var [resultsNoStock, metadataNoStock] = await sequelize.query("SELECT P.id, P.proveedor, P.name, C.name as categoria, P.precioVenta, P.precioVenta2, P.precioVenta3, P.color, SUM(S.cantidadRestante) as disponible FROM Stocks as S RIGHT JOIN Productos as P ON S.ProductoId=P.id INNER JOIN Categoria as C ON P.CategoriumId=C.id WHERE P.status=true GROUP BY P.id HAVING disponible<=0 OR disponible IS NULL ORDER BY P.id;");
         }
         res.status(200).json({
             ok: true,
             productos: results,
             productosNoDisponibles: resultsNoStock
+        });
+    } catch(error){
+        console.log(error);
+    }
+}
+
+// Get stock by category report
+exports.getCategoryReport = async (req, res) => {
+    try {
+        console.log("RREEKKK",req);
+        var [results, metadata] = await sequelize.query(`SELECT P.id, P.proveedor, P.name, C.name as categoria, P.precioVenta, P.precioVenta2, P.precioVenta3, P.color, SUM(S.cantidadRestante) as disponible FROM Stocks as S RIGHT JOIN Productos as P ON S.ProductoId=P.id INNER JOIN Categoria as C ON P.CategoriumId=C.id WHERE P.status=true AND CategoriumId=${req.query.category} GROUP BY P.id ORDER BY P.id;`);
+        res.status(200).json({
+            ok: true,
+            productos: results
         });
     } catch(error){
         console.log(error);
@@ -124,7 +138,7 @@ exports.getTotalProductosController = async(req, res) => {
                     {name: {
                         [Op.substring]: req.query.buscador
                     }},
-                    {precioVenta1: {
+                    {precioVenta: {
                         [Op.eq]: req.query.buscador
                     }},
                     {precioVenta2: {
@@ -170,7 +184,7 @@ exports.postProductoController = async (req, res) => {
         });
         const producto = {
             name: req.body.name,
-            precioVenta1: req.body.precioVenta1,
+            precioVenta: req.body.precioVenta,
             precioVenta2: req.body.precioVenta2,
             precioVenta3: req.body.precioVenta3,
             CategoriumId: categoria.id,
@@ -241,7 +255,7 @@ exports.putProductoController = async (req, res) => {
             id: req.body.id,
             name: req.body.name,
             color: req.body.color,
-            precioVenta1: req.body.precioVenta1,
+            precioVenta: req.body.precioVenta,
             precioVenta2: req.body.precioVenta2,
             precioVenta3: req.body.precioVenta3,
             proveedor: req.body.proveedor

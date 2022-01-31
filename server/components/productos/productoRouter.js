@@ -14,7 +14,8 @@ const {getProductosController,
     getReporteProductos,
     getListadoStockController,
     getReporteStockController,
-    deleteStockController
+    deleteStockController,
+    getCategoryReport
 } = require('./productoController');
 
 productoRouter
@@ -28,6 +29,7 @@ productoRouter
     .put('/', putProductoController)
     .put('/delete', deleteProductoController)
     .get('/reporte', getReporteProductos)
-    .get('/reporteStock', getReporteStockController);
+    .get('/reporteStock', getReporteStockController)
+    .get('/categories', getCategoryReport);
 
 module.exports = productoRouter;

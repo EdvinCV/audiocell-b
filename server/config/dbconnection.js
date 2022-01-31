@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('buba', 'buba', 'buba', {
+const sequelize = new Sequelize('audiocell', 'root', 'Andromeda97as..', {
     host: 'localhost',
     dialect: "mysql",
     operatorAliases: false,
@@ -18,5 +18,10 @@ db.stocks = require('../components/productos/stockModel')(sequelize, Sequelize);
 db.ventas = require('../components/ventas/ventasModel')(sequelize, Sequelize);
 db.detalles = require('../components/ventas/ventaDetalleModel')(sequelize, Sequelize);
 db.cajas = require('../components/caja/cajaModel')(sequelize, Sequelize);
+db.companies = require('../components/recargas/companyModel')(sequelize, Sequelize);
+db.dispositivos = require('../components/recargas/dispositivoModel')(sequelize, Sequelize);
+db.recargas = require('../components/recargas/recargasModel')(sequelize, Sequelize);
+
+
 
 module.exports = db;

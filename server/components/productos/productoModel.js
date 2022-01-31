@@ -9,7 +9,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING(50),
             allowNull: false
         },
-        precioVenta1: {
+        precioVenta: {
             type: Sequelize.DECIMAL,
             allowNull: true,
         },
