@@ -15,10 +15,16 @@ const {getProductosController,
     getListadoStockController,
     getReporteStockController,
     deleteStockController,
-    getCategoryReport
+    getCategoryReport,
+    getAllProducts,
+    getProductsAvailableStock,
+    getProductsNotAvailableStock
 } = require('./productoController');
 
 productoRouter
+    .get('/all', getAllProducts)
+    .get('/available', getProductsAvailableStock)
+    .get('/notAvailable', getProductsNotAvailableStock)
     .get('/', getProductosController)
     .get('/total', getTotalProductosController)
     .get('/stock', getListadoStockController)
